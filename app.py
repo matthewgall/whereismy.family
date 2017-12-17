@@ -90,11 +90,14 @@ if __name__ == '__main__':
 	log = logging.getLogger(__name__)
 
 	try:
-		r = redis.Redis(
-			host=args.redis_host,
-			port=args.redis_port, 
-			password=args.redis_pw,
-		)
+		if os.getenv('REDISCLOUD_URL'):
+			r = redis.from_url(os.getenv('REDISCLOUD_URL'))
+		else:
+			r = redis.Redis(
+				host=args.redis_host,
+				port=args.redis_port, 
+				password=args.redis_pw,
+			)
 	except:
 		log.error("Unable to connect to redis on {}:{}".format(args.redis_host, args.redis_port))
 
