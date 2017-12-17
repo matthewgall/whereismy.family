@@ -37,7 +37,7 @@ def update():
 		username, password = parse_auth(request.headers.get('Authorization'))
 
 		# Now we save this to redis
-		r.set(username, json.dumps({
+		r.set("location/{}".format(username), json.dumps({
 			'lat': data['lat'],
 			'lon': data['lon'],
 			'tid': data['tid'],
@@ -52,7 +52,7 @@ def update():
 @route('/<user>', ('GET'))
 @route('/<user>.<ext>', ('GET'))
 def get_user(user, ext='html'):
-	data = json.loads(r.get(user))
+	data = json.loads(r.get("location/{}".format(user)))
 
 	delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(int(data['tst']))
 	data['delta'] = humanize.naturaltime(delta)
