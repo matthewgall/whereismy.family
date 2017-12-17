@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import os, sys, argparse, logging, json, base64
-import requests, redis
+import os, sys, argparse, logging, json, base64, datetime
+import requests, redis, humanize
 from bottle import route, request, response, default_app, view, template, static_file, auth_basic, parse_auth
 
 def enable_cors(fn):
@@ -45,13 +45,18 @@ def update():
 		}))
 
 	return json.dumps({
-		'success': True,
+		'_type': 'card',
+		'name': "@{}".format(username)
 	})
 
 @route('/<user>', ('GET'))
 @route('/<user>.<ext>', ('GET'))
 def get_user(user, ext='html'):
-	data = r.get(user)
+	data = json.loads(r.get(user))
+
+	delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(int(data['tst']))
+	data['delta'] = humanize.naturaltime(delta)
+
 	if ext in ['json']:
 		response.headers['Content-Type'] = 'application/json'
 		return json.loads(data)

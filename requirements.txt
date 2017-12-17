@@ -2,3 +2,6 @@ bottle
 tornado
 requests
 redis
+sqlalchemy
+alembic
+humanize
