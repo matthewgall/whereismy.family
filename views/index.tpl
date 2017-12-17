@@ -3,10 +3,10 @@
     <div class="starter-template">
         <h1>Welcome to whereismy.family</h1>
         <p class="lead">
-            Need DNS? Need it in an application accessible method? <br />
-            If you need this, then dnsjson.com is for you!
+            Simple privacy aware, OwnTracks powered, location tracking
         </p>
         <p>&nbsp;</p>
+        % if args.enable_register:
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h2 class="panel-title">Register</h3>
@@ -14,6 +14,7 @@
             <div class="panel-body">
             </div>
         </div>
+        % end
     </div>
 </div>
 % include('global/footer.tpl')

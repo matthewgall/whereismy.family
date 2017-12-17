@@ -64,7 +64,7 @@ def get_user(user, ext='html'):
 
 @route('/', ('GET', 'POST'))
 def index():
-	return template("index")
+	return template("index", args=args)
 
 if __name__ == '__main__':
 
@@ -78,6 +78,9 @@ if __name__ == '__main__':
 	parser.add_argument("--redis-host", default=os.getenv('REDIS_HOST', 'localhost'), help="redis hostname")
 	parser.add_argument("--redis-port", default=os.getenv('REDIS_PORT', 6379), help="redis port")
 	parser.add_argument("--redis-pw", default=os.getenv('REDIS_PW', ''), help="redis password")
+
+	## Application settings
+	parser.add_argument("--enable-register", "-e", help="enable registration", action="store_true")
 
 	# Verbose mode
 	parser.add_argument("--verbose", "-v", help="increase output verbosity", action="store_true")
