@@ -2,6 +2,7 @@ bottle
 tornado
 requests
 redis
+tinydb
 sqlalchemy
 alembic
 humanize

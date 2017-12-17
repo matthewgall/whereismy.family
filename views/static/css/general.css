@@ -1,0 +1,22 @@
+body {
+    padding-top: 50px;
+    margin-bottom: 60px;
+}
+.template {
+    text-align: center;
+}
+.navbar-inverse, .panel-primary>.panel-heading, .btn-primary {
+    background-color: #0077da;
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
+.container .text-muted {
+    margin: 20px 0;
+    color: #707070;
+}

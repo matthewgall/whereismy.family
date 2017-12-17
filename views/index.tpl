@@ -1,6 +1,6 @@
 % include('global/header.tpl', title='Home')
 <div class="container">
-    <div class="starter-template">
+    <div class="template">
         <h1>Welcome to whereismy.family</h1>
         <p class="lead">
             Simple privacy aware, OwnTracks powered, location tracking

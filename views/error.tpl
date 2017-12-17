@@ -1,6 +1,6 @@
 % include('global/header.tpl', title='Uh oh...')
 <div class="container">
-    <div class="starter-template">
+    <div class="template">
         <h1>Uh oh...</h1>
         <p class="lead">
             Looks like we encountered an error. You might wish to go back, and try again.
