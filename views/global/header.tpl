@@ -9,9 +9,9 @@
 
 <link href="/static/css/bootstrap.min.css" rel="stylesheet">
 <link href="/static/css/general.css" rel="stylesheet">
-<link rel="stylesheet" href='//api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' />
+<link rel="stylesheet" href='//api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' />
 
-<script src='//api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+<script src='//api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js'></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">

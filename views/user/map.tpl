@@ -1,15 +1,25 @@
-<div id="map" style="height: 600px"></div>
+<div id="map" style="height: 500px"></div>
 <script>
-	L.mapbox.accessToken = "{{args.mapbox_token}}";
+	mapboxgl.accessToken = "{{args.mapbox_token}}";
 
-	var map = L.mapbox.map('map').setView([{{data['lat']}}, {{data['lon']}}], {{args.map_zoom}});		
-	
-	L.mapbox.styleLayer('mapbox://styles/mapbox/dark-v9').addTo(map);		
-	var featureLayer = L.mapbox.featureLayer()
-		.loadURL('/{{username}}.mapbox')
-		.addTo(map);
-
-	window.setInterval(function() {
-		featureLayer.loadURL('/{{username}}.mapbox')
-	}, 60000);
+	var map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v9',
+		center: [{{data['lon']}}, {{data['lat']}}],
+		zoom: {{args.map_zoom - 1}},
+		interactive: false
+	});
+	map.on('load', function () {
+		map.addSource(
+			"location", {
+				"type": "geojson",
+				"data": "/{{username}}.mapbox"
+			}
+		);
+		map.addLayer({
+			"id": "location",
+			"type": "circle",
+			"source": "location"
+		});
+	})
 </script>
