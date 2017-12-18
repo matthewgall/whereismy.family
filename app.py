@@ -69,7 +69,7 @@ def update():
 		}))
 
 		# And delete our in memory representation
-		db.remove(where('username') == user)
+		db.remove(where('username') == username)
 
 	return json.dumps({
 		'_type': 'card',
