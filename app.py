@@ -87,6 +87,9 @@ def get_user(user, ext='html'):
 	data['delta'] = humanize.naturaltime(delta)
 	data['display_name'] = Nominatim().reverse(data['lat'], data['lon'], args.location_zoom)['display_name']
 
+	if args.w3w_token != "":
+		data['w3w'] = what3words.Geocoder(args.w3w_token).reverse(lat=data['lat'], lng=data['lon'])['words']
+	
 	if ext in ['json']:
 		response.headers['Content-Type'] = 'application/json'
 		return json.dumps(data)
@@ -112,8 +115,7 @@ def get_user(user, ext='html'):
 		'user/index',
 		args=args,
 		data=data,
-		username=user,
-		w3w=what3words.Geocoder(args.w3w_token).reverse(lat=data['lat'], lng=data['lon'])['words']
+		username=user
 	)
 
 @route('/', ('GET', 'POST'))
