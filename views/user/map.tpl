@@ -2,7 +2,7 @@
 <script>
 	L.mapbox.accessToken = "{{mapbox}}";
 
-	var map = L.mapbox.map('map').setView([{{data['lat']}}, {{data['lon']}}], 14);		
+	var map = L.mapbox.map('map').setView([{{data['lat']}}, {{data['lon']}}], {{args.map_zoom}});		
 	
 	L.mapbox.styleLayer('mapbox://styles/mapbox/dark-v9').addTo(map);		
 	var featureLayer = L.mapbox.featureLayer()

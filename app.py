@@ -85,7 +85,7 @@ def get_user(user, ext='html'):
 	data = get_user_location(user)
 	delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(int(data['tst']))
 	data['delta'] = humanize.naturaltime(delta)
-	data['display_name'] = Nominatim().reverse(data['lat'], data['lon'], 12)['display_name']
+	data['display_name'] = Nominatim().reverse(data['lat'], data['lon'], args.location_zoom)['display_name']
 
 	if ext in ['json']:
 		response.headers['Content-Type'] = 'application/json'
@@ -110,6 +110,7 @@ def get_user(user, ext='html'):
 		return json.dumps(body)
 	return template(
 		'user',
+		args=args,
 		username=user,
 		mapbox=os.getenv('MAPBOX_KEY', ''),
 		data=data
@@ -136,6 +137,13 @@ if __name__ == '__main__':
 	## Application settings
 	parser.add_argument("--enable-register", "-e", help="enable registration", action="store_true")
 
+	## Location settings
+	parser.add_argument("--accept-accuracy", default=os.getenv('ACC_ACCEPT', 100), help="locations under this level of accuracy will be accepted")
+	
+	## Zoom settings
+	parser.add_argument("--location-zoom", default=os.getenv('LOCATION_ZOOM', 10), help="locations when displayed, will be displayed at this zoom level")
+	parser.add_argument("--map-zoom", default=os.getenv('MAP_ZOOM', 14), help="locations when displayed, will be displayed at this zoom level")
+	
 	# Verbose mode
 	parser.add_argument("--verbose", "-v", help="increase output verbosity", action="store_true")
 	args = parser.parse_args()
