@@ -3,9 +3,8 @@
 <div class="container">
     <div class="template">
         <h1>{{username}}</h1>
-        <div class="well well-lg">
-            {{data['display_name']}}
-        </div>
+        <h3>{{data['display_name']}}</h3>
+        <small>{{data['delta']}}</small>
     </div>
 </div>
 % include('global/footer.tpl')
