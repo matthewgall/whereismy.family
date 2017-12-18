@@ -102,8 +102,8 @@ def get_user(user, ext='html'):
 					"coordinates": [data['lon'], data['lat']]
 				},
 				"properties": {
-					"title": "",
-					"description": ""
+					"title": data['display_name'],
+					"description": data['delta']
 				}
 			}]
 		}
