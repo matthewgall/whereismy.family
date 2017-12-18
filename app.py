@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os, sys, argparse, logging, json, base64, datetime, time
-import requests, redis, humanize
+import requests, redis, humanize, what3words
 from bottle import route, request, response, default_app, view, template, static_file, auth_basic, parse_auth
 from tinydb import TinyDB, where
 from tinydb.storages import MemoryStorage
@@ -111,9 +111,9 @@ def get_user(user, ext='html'):
 	return template(
 		'user',
 		args=args,
+		data=data,
 		username=user,
-		mapbox=os.getenv('MAPBOX_KEY', ''),
-		data=data
+		w3w=what3words.Geocoder(args.w3w_token).reverse(lat=data['lat'], lng=data['lon'])['words']
 	)
 
 @route('/', ('GET', 'POST'))
@@ -134,13 +134,17 @@ if __name__ == '__main__':
 	parser.add_argument("--redis-pw", default=os.getenv('REDIS_PW', ''), help="redis password")
 	parser.add_argument("--redis-ttl", default=os.getenv('REDIS_TTL', 604800), help="redis time to cache records")
 
-	## Application settings
+	# API tokens
+	parser.add_argument("--mapbox-token", default=os.getenv('MAPBOX_KEY', ''), help="mapbox api token")
+	parser.add_argument("--w3w-token", default=os.getenv('W3W_KEY', ''), help="what3words api token")
+
+	# Application settings
 	parser.add_argument("--enable-register", "-e", help="enable registration", action="store_true")
 
-	## Location settings
+	# Location settings
 	parser.add_argument("--accept-accuracy", default=os.getenv('ACC_ACCEPT', 100), help="locations under this level of accuracy will be accepted")
 	
-	## Zoom settings
+	# Zoom settings
 	parser.add_argument("--location-zoom", default=os.getenv('LOCATION_ZOOM', 10), help="locations when displayed, will be displayed at this zoom level")
 	parser.add_argument("--map-zoom", default=os.getenv('MAP_ZOOM', 14), help="locations when displayed, will be displayed at this zoom level")
 	

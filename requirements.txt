@@ -6,3 +6,4 @@ tinydb
 sqlalchemy
 alembic
 humanize
+what3words

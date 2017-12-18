@@ -1,6 +1,6 @@
 <div id="map" style="height: 600px"></div>
 <script>
-	L.mapbox.accessToken = "{{mapbox}}";
+	L.mapbox.accessToken = "{{args.mapbox_token}}";
 
 	var map = L.mapbox.map('map').setView([{{data['lat']}}, {{data['lon']}}], {{args.map_zoom}});		
 	
