@@ -109,7 +109,7 @@ def get_user(user, ext='html'):
 		}
 		return json.dumps(body)
 	return template(
-		'user',
+		'user/index',
 		args=args,
 		data=data,
 		username=user,
