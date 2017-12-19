@@ -9,9 +9,10 @@
 
 <link href="/static/css/bootstrap.min.css" rel="stylesheet">
 <link href="/static/css/general.css" rel="stylesheet">
-<link rel="stylesheet" href='//api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' />
+<link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/mapbox-gl/0.42.2/mapbox-gl.css' />
+<link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' />
 
-<script src='//api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/mapbox-gl/0.42.2/mapbox-gl.js'></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
