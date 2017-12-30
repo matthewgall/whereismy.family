@@ -3,7 +3,6 @@ tornado
 requests
 redis
 tinydb
-sqlalchemy
-alembic
+psycopg2
 humanize
 what3words

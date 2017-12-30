@@ -92,7 +92,9 @@ def get_user(user, ext='html'):
 	
 	if ext in ['json']:
 		response.headers['Content-Type'] = 'application/json'
-		return json.dumps(data)
+		return json.dumps({
+			"location": data
+		})
 
 	if ext in ['mapbox']:
 		response.headers['Content-Type'] = 'application/json'
