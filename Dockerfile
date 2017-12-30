@@ -8,8 +8,7 @@ RUN apk add --update \
 	py-pip \
 	py3-virtualenv \
 	openssl-dev \
-	libffi-dev \
-	postgresql \
+	libffi-dev
 	&& rm -rf /var/cache/apk/*
 
 WORKDIR /app

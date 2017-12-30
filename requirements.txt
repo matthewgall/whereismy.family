@@ -3,6 +3,5 @@ tornado
 requests
 redis
 tinydb
-psycopg2
 humanize
 what3words
