@@ -8,7 +8,7 @@
 			<h4 id="delta">
 				<i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{{data['delta']}}
 			</h4>
-			% if not args.w3w_token == "":
+			% if not args.w3w == "":
 				<h5 id="w3w">
 					{{data['w3w']}}
 				</h5>

@@ -1,6 +1,6 @@
 <div id="map" style="height: 500px"></div>
 <script>
-	mapboxgl.accessToken = "{{args.mapbox_token}}";
+	mapboxgl.accessToken = "{{args.mapbox}}";
 
 	var map = new mapboxgl.Map({
 		container: 'map',

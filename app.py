@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
 import os, sys, argparse, logging, json, base64, datetime, time
-import requests, redis, humanize, what3words
+import requests, humanize, what3words, redis
 from bottle import route, request, response, default_app, view, template, static_file, auth_basic, parse_auth
-from tinydb import TinyDB, where
-from tinydb.storages import MemoryStorage
 from modules import Nominatim
 
 def enable_cors(fn):
@@ -21,25 +19,10 @@ def auth_user(user, password):
 	return True
 
 def get_user_location(user):
-		if db.get(where('username') == user):
-			if db.get(where('username') == user)['expires'] <= int(time.time()):
-				return json.loads(db.get(where('username') == user)['data'])
-			else:
-				db.remove(where('username') == user)
-
-		# Then redis
-		redis_data = r.get("location/{}".format(user))
-		if redis_data:
-			# Then we put it in memory
-			db.insert({
-				'username': user,
-				'data': r.get("location/{}".format(user)),
-				'expires': int(time.time()) + int(args.redis_ttl)
-			})
-
-			# And return that
-			return json.loads(db.get(where('username') == user)['data'])
-		return None
+	redis_data = r.get("location/{}".format(user))
+	if redis_data:
+		return json.loads(redis_data)
+	return None
 
 @route('/static/<filepath:path>')
 def static(filepath):
@@ -68,9 +51,6 @@ def update():
 			'tst': data['tst']
 		}))
 
-		# And delete our in memory representation
-		db.remove(where('username') == username)
-
 	return json.dumps({
 		'_type': 'card',
 		'name': "@{}".format(username)
@@ -83,12 +63,15 @@ def get_user(user, ext='html'):
 		return ""
 
 	data = get_user_location(user)
+	if data == None:
+		return template("error")
+
 	delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(int(data['tst']))
 	data['delta'] = humanize.naturaltime(delta)
 	data['display_name'] = Nominatim().reverse(data['lat'], data['lon'], args.location_zoom)['display_name']
 
-	if args.w3w_token != "":
-		data['w3w'] = what3words.Geocoder(args.w3w_token).reverse(lat=data['lat'], lng=data['lon'])['words']
+	if args.w3w != "":
+		data['w3w'] = what3words.Geocoder(args.w3w).convert_to_3wa(what3words.Coordinates(data['lat'], data['lon']))['words']
 	
 	if ext in ['json']:
 		response.headers['Content-Type'] = 'application/json'
@@ -133,14 +116,11 @@ if __name__ == '__main__':
 	parser.add_argument("-p", "--port", default=os.getenv('PORT', 5000), help="server port")
 
 	# Redis settings
-	parser.add_argument("--redis-host", default=os.getenv('REDIS_HOST', 'localhost'), help="redis hostname")
-	parser.add_argument("--redis-port", default=os.getenv('REDIS_PORT', 6379), help="redis port")
-	parser.add_argument("--redis-pw", default=os.getenv('REDIS_PW', ''), help="redis password")
-	parser.add_argument("--redis-ttl", default=os.getenv('REDIS_TTL', 604800), help="redis time to cache records")
+	parser.add_argument("--redis", default=os.getenv('REDIS', 'redis://localhost:6379/0'), help="redis connection string")
 
 	# API tokens
-	parser.add_argument("--mapbox-token", default=os.getenv('MAPBOX_KEY', ''), help="mapbox api token")
-	parser.add_argument("--w3w-token", default=os.getenv('W3W_KEY', ''), help="what3words api token")
+	parser.add_argument("--mapbox", default=os.getenv('MAPBOX', ''), help="mapbox api token")
+	parser.add_argument("--w3w", default=os.getenv('W3W', ''), help="what3words api token")
 
 	# Application settings
 	parser.add_argument("--enable-register", "-e", help="enable registration", action="store_true")
@@ -163,22 +143,12 @@ if __name__ == '__main__':
 	log = logging.getLogger(__name__)
 
 	try:
-		if os.getenv('REDISCLOUD_URL'):
-			r = redis.from_url(os.getenv('REDISCLOUD_URL'))
-		else:
-			r = redis.Redis(
-				host=args.redis_host,
-				port=args.redis_port, 
-				password=args.redis_pw,
-			)
+		r = redis.Redis().from_url(args.redis)
+		r.set('test', 'test')
+		t = r.get('test')
+		r.delete('test')
 	except:
-		log.fatal("Unable to connect to redis on {}:{}".format(args.redis_host, args.redis_port))
-		exit()
-
-	try:
-		db = TinyDB(storage=MemoryStorage)
-	except:
-		log.fatal("Unable to connect to TinyDB")
+		log.fatal('Unable to successfully connect to redis: {}'.format(args.redis))
 		exit()
 
 	try:
