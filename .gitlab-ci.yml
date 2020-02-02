@@ -11,6 +11,6 @@ build:
     - docker login --username=_ --password=$HEROKU_REGISTRY_PASSWORD $HEROKU_REGISTRY
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
-    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" "$HEROKU_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" "$HEROKU_REGISTRY_IMAGE:latest"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-    - docker push "$HEROKU_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+    - docker push "$HEROKU_REGISTRY_IMAGE:latest"
