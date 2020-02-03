@@ -10,7 +10,7 @@
 			</h4>
 			% if not args.w3w == "":
 				<h5 id="w3w">
-					{{data['w3w']}}
+					<a href="https://what3words.com/{{data['w3w']}}" target="_blank">{{data['w3w']}}</a>
 				</h5>
 			% end
 		</div>
