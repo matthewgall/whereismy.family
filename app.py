@@ -116,7 +116,7 @@ if __name__ == '__main__':
 	parser.add_argument("-p", "--port", default=os.getenv('PORT', 5000), help="server port")
 
 	# Redis settings
-	parser.add_argument("--redis", default=os.getenv('REDIS', 'redis://localhost:6379/0'), help="redis connection string")
+	parser.add_argument("--redis", default=os.getenv('REDISTOGO_URL', os.getenv('REDIS', 'redis://localhost:6379/0')), help="redis connection string")
 
 	# API tokens
 	parser.add_argument("--mapbox", default=os.getenv('MAPBOX', ''), help="mapbox api token")
