@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container">
         <p class="text-muted">
-        	&copy; <script type="text/javascript">document.write(new Date().getFullYear());</script> whereismy.family - <a href="https://github.com/matthewgall/whereismy.family">GitHub</a>
+        	&copy; <script type="text/javascript">document.write(new Date().getFullYear());</script> whereismy.family - <a href="https://codedin.wales/matthew/whereismy.family">GitHub</a>
         </p>
     </div>
 </footer>
