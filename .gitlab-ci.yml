@@ -1,11 +1,12 @@
-# Official docker image.
-image: docker:latest
-
-services:
-  - docker:dind
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_TLS_CERTDIR: ""
 
 build:
+  image: docker:latest
   stage: build
+  services:
+    - docker:dind
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker login --username=_ --password=$HEROKU_REGISTRY_PASSWORD $HEROKU_REGISTRY
