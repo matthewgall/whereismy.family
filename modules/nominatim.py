@@ -10,7 +10,7 @@ class Nominatim:
 		}
 
 	def __parse__(self, data, respFormat):
-		if respFormat is "json":
+		if respFormat == "json":
 			return data.json()
 		return data.text
 
