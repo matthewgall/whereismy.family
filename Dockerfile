@@ -13,7 +13,8 @@ RUN apk add --update \
 WORKDIR /app
 COPY . /app
 
-RUN pip3 install -r /app/requirements.txt
+RUN pip3 install --upgrade pip && \
+    pip3 install -r /app/requirements.txt
 
 EXPOSE 5000
 CMD ["python3", "/app/app.py"]
