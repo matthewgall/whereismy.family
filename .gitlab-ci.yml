@@ -9,9 +9,9 @@ build:
     - docker:dind
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker login --username=_ --password=$HEROKU_REGISTRY_PASSWORD $HEROKU_REGISTRY
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"    
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
-    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" "$HEROKU_REGISTRY_IMAGE:latest"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" matthewgall/whereismyfamily:latest
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-    - docker push "$HEROKU_REGISTRY_IMAGE:latest"
+    - docker push matthewgall/whereismyfamily:latest
