@@ -77,9 +77,17 @@ spec:
         backend:
           serviceName: ${NAME}
           servicePort: http
+  - host: "www.whereismy.family"
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ${NAME}
+          servicePort: http
   tls:
   - hosts:
     - 'whereismy.family'
+    - 'www.whereismy.family'
     secretName: ${NAME}-cert
 ---
 apiVersion: v1
