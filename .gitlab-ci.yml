@@ -11,4 +11,4 @@ build:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"    
   script:
     - docker build --pull -t matthewgall/whereismy.family:latest .
-    - docker push 
+    - docker push matthewgall/whereismy.family:latest
