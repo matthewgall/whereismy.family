@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ${NAME}
-        image: matthewgall/whereismyfamily:latest
+        image: matthewgall/whereismy.family:latest
         ports:
         - containerPort: 5000
         env:
