@@ -12,6 +12,6 @@ build:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"    
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
-    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" matthewgall/whereismyfamily:latest
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" matthewgall/whereismy.family:latest
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-    - docker push matthewgall/whereismyfamily:latest
+    - docker push matthewgall/whereismy.family:latest
