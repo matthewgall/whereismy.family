@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
       - name: ${NAME}
-        image: matthewgall/whereismy.family:latest
+        image: ${IMAGE}:latest
         ports:
         - containerPort: 5000
         env:
           - name: IP
             value: '0.0.0.0'
           - name: REDIS
-            value: redis://${NAME}-redis.whereismyfamily.svc.cluster.local:6379
+            value: redis://${NAME}-redis.${NAMESPACE}.svc.cluster.local:6379
           - name: W3W
             valueFrom:
               secretKeyRef:

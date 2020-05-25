@@ -1,5 +1,6 @@
 export NAME?=whereismyfamily
 export NAMESPACE?=whereismyfamily
+export IMAGE?=matthewgall/whereismy.family
 export COLO:=$(shell kubectx -c)
 
 .PHONY: apply
