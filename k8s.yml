@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${NAMESPACE}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,11 +21,11 @@ spec:
     spec:
       containers:
       - name: ${NAME}
-        image: ${IMAGE}:latest
+        image: ${IMAGE}:edge
         ports:
         - containerPort: 5000
         env:
-          - name: IP
+          - name: HOST
             value: '0.0.0.0'
           - name: REDIS
             value: redis://${NAME}-redis.${NAMESPACE}.svc.cluster.local:6379
