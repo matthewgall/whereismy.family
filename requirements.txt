@@ -5,3 +5,4 @@ redis
 tinydb
 humanize
 what3words
+haversine

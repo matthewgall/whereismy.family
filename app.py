@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import os, sys, argparse, logging, json, base64, datetime, time
+import os, sys, argparse, logging, json, base64, datetime, time, random, string
 import requests, humanize, what3words, redis
 from bottle import route, request, response, default_app, view, template, static_file, auth_basic, parse_auth
+from haversine import haversine, Unit
 from modules import Nominatim
 
 def enable_cors(fn):
@@ -43,8 +44,24 @@ def update():
 	if data['_type'] in ['location']:
 		username, password = parse_auth(request.headers.get('Authorization'))
 
+		if not password is args.seed:
+			return json.dumps({
+				'success': False,
+				'message': "You provided an incorrect password for updates"
+			})
+
+		# Now we check for the distance between their current location and their update
+		prev = json.loads(r.get(f"location/{username}"))
+		dist = haversine((prev['lat'], prev['lon']), (data['lat'], data['lon']), unit=Unit.METERS)
+
+		if not dist > int(args.accept_accuracy):
+			return json.dumps({
+				'success': False,
+				'message': "New location is less than 100m from previous location. Ignoring"
+			})
+
 		# Now we save this to redis
-		r.set("location/{}".format(username), json.dumps({
+		r.set(f"location/{username}", json.dumps({
 			'lat': data['lat'],
 			'lon': data['lon'],
 			'tid': data['tid'],
@@ -53,13 +70,13 @@ def update():
 
 	return json.dumps({
 		'_type': 'card',
-		'name': "@{}".format(username)
+		'name': f"@{username}"
 	})
 
 @route('/<user>', ('GET'))
 @route('/<user>.<ext>', ('GET'))
 def get_user(user, ext='html'):
-	if "{}.{}".format(user, ext) in ['favicon.ico', "robots.txt"]:
+	if f"{user}.{ext}" in ['favicon.ico', "robots.txt"]:
 		return ""
 
 	data = get_user_location(user)
@@ -71,8 +88,11 @@ def get_user(user, ext='html'):
 	data['display_name'] = Nominatim().reverse(data['lat'], data['lon'], args.location_zoom)['display_name']
 
 	if args.w3w != "":
-		data['w3w'] = what3words.Geocoder(args.w3w).convert_to_3wa(what3words.Coordinates(data['lat'], data['lon']))['words']
-	
+		try:
+			data['w3w'] = what3words.Geocoder(args.w3w).convert_to_3wa(what3words.Coordinates(data['lat'], data['lon']))['words']
+		except:
+			data['w3w'] = ''
+
 	if ext in ['json']:
 		response.headers['Content-Type'] = 'application/json'
 		return json.dumps({
@@ -114,7 +134,8 @@ if __name__ == '__main__':
 	# Server settings
 	parser.add_argument("-i", "--host", default=os.getenv('IP', '127.0.0.1'), help="server ip")
 	parser.add_argument("-p", "--port", default=os.getenv('PORT', 5000), help="server port")
-
+	parser.add_argument("-s", "--seed", default=os.getenv('SEED', ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(20))), help="server seed")
+	
 	# Redis settings
 	parser.add_argument("--redis", default=os.getenv('REDISTOGO_URL', os.getenv('REDIS', 'redis://localhost:6379/0')), help="redis connection string")
 
@@ -148,12 +169,13 @@ if __name__ == '__main__':
 		t = r.get('test')
 		r.delete('test')
 	except:
-		log.fatal('Unable to successfully connect to redis: {}'.format(args.redis))
+		log.fatal(f"Unable to successfully connect to redis: {args.redis}")
 		exit()
 
 	try:
+		print(f"Using secure seed: {args.seed}")
 		app = default_app()
 		app.run(host=args.host, port=args.port, server='tornado')
 	except:
-		log.error("Unable to start server on {}:{}".format(args.host, args.port))
+		log.error(f"Unable to start server on {args.host}:{args.port}")
 		exit()
